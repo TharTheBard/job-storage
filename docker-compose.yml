@@ -1,0 +1,26 @@
+version: '3'
+services:
+  postgres-jobs:
+    image: postgres
+    container_name: postgres-jobs
+    ports:
+      - 5442:5432
+    environment:
+      - POSTGRES_PASSWORD=aweakpassword
+      - POSTGRES_USER=postgres
+    networks:
+      - jobs-backend
+    volumes:
+      - './db:/var/lib/postgresql/data'
+
+
+  rsyslog:
+    image: vimagick/rsyslog
+    networks:
+      - jobs-backend
+    volumes:
+      - './log:/var/log'
+    restart: always
+
+networks:
+  jobs-backend: null
