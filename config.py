@@ -4,8 +4,6 @@
 DEBUG = True
 SWAGGER_UI_DOC = True
 
-ANKH_URL = "http://localhost:5500/"
-
 DB_USER = "postgres"
 DB_PASS = "aweakpassword"
 DB_HOST = "localhost"
