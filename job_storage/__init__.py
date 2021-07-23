@@ -60,6 +60,7 @@ class JobStorage(Flask):
         )
         self.api.add_namespace(routes.jobs.api, path='/jobs')
         self.api.add_namespace(routes.candidates.api, path='/candidates')
+        self.api.add_namespace(routes.skills.api, path='/skills')
 
     def set_logger(self):
         """

@@ -12,10 +12,9 @@ class InsertJob:
 
 
 class InsertJobSchema(JobStorageSchema):
-    title = fields.String(allow_none=False, metadata={"example": "Job title"})
-    salary = fields.Integer(allow_none=False, metadata={"example": "50000"})
-    description = fields.String(allow_none=True, missing=None,
-                                metadata={"example": "This is a (not so) lengthy job description"})
+    title = fields.String(required=True, metadata={"example": "Job title"})
+    salary = fields.Integer(required=True, metadata={"example": "50000"})
+    description = fields.String(required=True, metadata={"example": "This is a (not so) lengthy job description"})
 
     @post_load
     def load_func(self, data, **kwargs):

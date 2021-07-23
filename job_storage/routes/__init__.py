@@ -1,1 +1,1 @@
-from . import jobs, candidates
+from . import jobs, candidates, skills
