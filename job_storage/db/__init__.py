@@ -201,7 +201,7 @@ class Storage(object):
                 skill_ids = []
                 for skill_title in skills:
                     found_skills = self.select_dicts(self.skills_stm.where(self.skills.c.title == skill_title), con)
-                    if len(found_skills) < 0:
+                    if len(found_skills) > 0:
                         skill_id = found_skills[0]["id"]
                     else:
                         skill_id = self.insert(self.skills.table.insert().values(title=skill_title), con)
@@ -295,7 +295,10 @@ class Storage(object):
             except exc.SQLAlchemyError as e:
                 trans.rollback()
                 app.logger.warning(f'Apply candidate error - {e}')
-                raise j_exc.DatabaseError
+                if "unique constraint" in e.orig.args[0]:
+                    raise j_exc.UniqueViolationError("Job already has this candidate assigned")
+                else:
+                    raise j_exc.DatabaseError
             else:
                 trans.commit()
 
@@ -307,7 +310,7 @@ class Storage(object):
             outerjoin(self.skills.table, self.candidates_skills.c.skill_id == self.skills.c.id)
 
         jobs_candidates_join = self.jobs.table. \
-            join(self.jobs_candidates.table, self.jobs.c.id == self.jobs_candidates.c.candidate_id). \
+            join(self.jobs_candidates.table, self.jobs.c.id == self.jobs_candidates.c.job_id). \
             outerjoin(self.candidates.table, self.jobs_candidates.c.candidate_id == self.candidates.c.id)
 
         # STATEMENTS
@@ -340,7 +343,7 @@ class Storage(object):
             self.candidates.c.full_name,
             self.candidates.c.expected_salary,
         ]).select_from(jobs_candidates_join). \
-            where(self.jobs.c.id == bindparam("job_id"))
+            where(self.jobs_candidates.c.job_id == bindparam("job_id"))
 
         self.update_job_stm = self.jobs.table.update(). \
             where(self.jobs.c.id == bindparam("job_id")). \

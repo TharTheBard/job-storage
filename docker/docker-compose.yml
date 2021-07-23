@@ -1,5 +1,20 @@
 version: '3'
 services:
+
+  job-storage:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: job-storage
+    ports:
+      - "2000:2000"
+    image: zoldak/job-storage:1.0
+    networks:
+      - jobs-backend
+    links:
+      - postgres-jobs
+      - rsyslog
+
   postgres-jobs:
     image: postgres
     container_name: postgres-jobs

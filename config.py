@@ -6,8 +6,8 @@ SWAGGER_UI_DOC = True
 
 DB_USER = "postgres"
 DB_PASS = "aweakpassword"
-DB_HOST = "localhost"
-DB_PORT = 5442
+DB_HOST = "postgres-jobs"
+DB_PORT = 5432
 DB_PATH = "jobs_db"
 
 DB_POOL_SIZE = 1
@@ -25,7 +25,7 @@ LOG_CONF = {  # see https://www.python.org/dev/peps/pep-0391/
     'handlers': {
         'sysloc5': {
             'class': 'logging.handlers.SysLogHandler',
-            'address': '/dev/log',
+            'address': ('rsyslog', 514),
             'facility': "local5",
             'formatter': 'general', }
     },
